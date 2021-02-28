@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Core\Database;
 
 /**
@@ -10,7 +11,7 @@ class Connection
     public static function make()
     {
         try {
-            return new \PDO("sqlite:".$_SERVER['DOCUMENT_ROOT'].'/app/core/database/sinuca.db');
+            return new \PDO('sqlite:' . __DIR__ . '/sinuca.db');
         } catch (\PDOException $e) {
             die($e->getMessage());
         }

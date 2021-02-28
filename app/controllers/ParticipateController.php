@@ -9,20 +9,18 @@ class ParticipateController
 
   public function store()
   {
-    if ($_POST['champ_id']){
+    if ($_POST['champ_id']) {
       $champ = App::get('database')->selectOne('championship', $_POST['champ_id']);
-    }else{
+    } else {
       $champ = App::get('database')->selectOne('championship');
     }
 
-    if ($champ->id){
+    if ($champ->id) {
       $num_participations = count((array)App::get('database')->selectParticipate($champ->id));
       var_dump($num_participations);
     }
 
-    var_dump($_SESSION["max_teams"]);
-
-    if ($num_participations<$_SESSION["max_teams"]){
+    if ($num_participations < $_SESSION["max_teams"]) {
       App::get('database')->insert('participate', [
         'id_team' => $_POST['id_team'],
         'id_champ' => $champ->id,
@@ -31,7 +29,7 @@ class ParticipateController
     } else {
       $_SESSION["error"] = "Número de participantes não pode passar de 10";
     }
-    
+
 
     if (isset($_SERVER["HTTP_REFERER"])) {
       header("Location: " . $_SERVER["HTTP_REFERER"]);

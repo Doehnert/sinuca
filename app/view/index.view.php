@@ -1,64 +1,75 @@
-<?php require ('partials/head.php'); ?>
+<?php require('partials/head.php'); ?>
+
+
+<?php if (isset($_SESSION["error_msg"])) {
+?>
+  <div class="alert alert-danger" role="alert">
+    <?php echo ($_SESSION["error_msg"]); ?>
+  </div>
+<?php
+}
+?>
+
 
 <h4>Ver outros campeonatos</h4>
 
 <form method="get" action="">
-    <select onchange="this.form.submit()" class="form-select" name="champ_id" aria-label="Default select example">
-      <?php
-        foreach ($champs as $ch) {
-      ?>
-       
-      <option value=<?php echo $ch->id; ?> <?php
-        if($ch->id == $champ->id){
-            echo " selected";
-        }
-      ?>><?php echo $ch->name; ?>
-      
+  <select onchange="this.form.submit()" class="form-select" name="champ_id" aria-label="Default select example">
+    <?php
+    foreach ($champs as $ch) {
+    ?>
+
+      <option value=<?php echo $ch->getId(); ?> <?php
+                                                if ($ch->getId() == $champ->getId()) {
+                                                  echo " selected";
+                                                }
+                                                ?>><?php echo $ch->getName(); ?>
+
       </option>
-      <?php
-        }
-      ?>
-    </select>  
-  </form>
+    <?php
+    }
+    ?>
+  </select>
+</form>
 
-    <h1>Campeonato de Sinuca</h1>
+<h1>Campeonato de Sinuca</h1>
 
-  <form method="post" action="./update">
+<form method="post" action="./update">
 
-    <input type="hidden" name="champ_id" value="<?php echo($champ->id); ?>" />
+  <input type="hidden" name="champ_id" value="<?php echo ($champ->getId()); ?>" />
 
-    <div class="mb-3">
-      <label for="name" class="form-label">Nome do Campeonato</label>
-      <input type="text" name="name" class="form-control" id="name" value="<?php echo($champ->name); ?>">
-    </div>
-    <div class="mb-3">
-      <label for="premium" class="form-label">Prêmio</label>
-      <input type="text" name="premium" class="form-control" id="premium" value=<?php echo $champ->premium; ?>>
-    </div>
-    <div class="mb-3">
-      <label for="premium" class="form-label">Pontos para ganhar</label>
-      <input type="text" name="ptw" class="form-control" id="ptw" value=<?php echo $champ->ptw; ?>>
-    </div>
-    
-    <div class="mb-3">
-      <label for="description" class="form-label">Descrição das regras</label>
+  <div class="mb-3">
+    <label for="name" class="form-label">Nome do Campeonato</label>
+    <input type="text" name="name" class="form-control" id="name" value="<?php echo ($champ->getName()); ?>">
+  </div>
+  <div class="mb-3">
+    <label for="premium" class="form-label">Prêmio</label>
+    <input type="text" name="premium" class="form-control" id="premium" value=<?php echo $champ->getPremium(); ?>>
+  </div>
+  <div class="mb-3">
+    <label for="premium" class="form-label">Pontos para ganhar</label>
+    <input type="text" name="ptw" class="form-control" id="ptw" value=<?php echo $champ->getPtw(); ?>>
+  </div>
 
-      <textarea name="description" for="description" class="form-control" id="description" for="description" ><?php echo $champ->description; ?></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Salvar</button>
-  </form>
+  <div class="mb-3">
+    <label for="description" class="form-label">Descrição das regras</label>
 
-  <form method="post" action="">
-    <button type="submit" class="btn btn-success">Novo Campeonato</button>
-  </form>
+    <textarea name="description" for="description" class="form-control" id="description" for="description"><?php echo $champ->getDescription(); ?></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
 
-  <a class='btn btn-danger' href=<?php echo "./delete?id_champ={$champ->id}"; ?>>Excluir Campeonato Atual</a>
+<form method="post" action="">
+  <button type="submit" class="btn btn-success">Novo Campeonato</button>
+</form>
+
+<a class='btn btn-danger' href=<?php echo "./delete?id_champ={$champ->getId()}"; ?>>Excluir Campeonato Atual</a>
 
 
 
-  <h2>Definir Times Participantes</h2>
+<h2>Definir Times Participantes</h2>
 
-  <table class="table">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">Time</th>
@@ -66,22 +77,21 @@
     </tr>
   </thead>
   <tbody>
-  <?php
-foreach ($champTeams as $team)
-{
-?>
-    <tr>
-      <td scope="row"><?php echo $team->name; ?></td>
-      <td> <a href=<?php echo "./participate/delete?id_team={$team->id}"; ?>>Excluir</a></td>
-    </tr>
     <?php
-}
-?>
+    foreach ($champTeams as $team) {
+    ?>
+      <tr>
+        <td scope="row"><?php echo $team->name; ?></td>
+        <td> <a href=<?php echo "./participate/delete?id_team={$team->id}"; ?>>Excluir</a></td>
+      </tr>
+    <?php
+    }
+    ?>
   </tbody>
 </table>
 
 
-<?php if ($_SESSION["error"]){
+<?php if ($_SESSION["error"]) {
 ?>
   <div class="alert alert-warning" role="alert">
     <?php echo $_SESSION["error"]; ?>
@@ -90,19 +100,19 @@ foreach ($champTeams as $team)
 }
 ?>
 
-  <form method="post" action="./participate">
-    <input type="hidden" name="champ_id" value="<?php echo($champ->id); ?>" />
-    <select class="form-select" name="id_team" aria-label="Default select example">
+<form method="post" action="./participate">
+  <input type="hidden" name="champ_id" value="<?php echo ($champ->id); ?>" />
+  <select class="form-select" name="id_team" aria-label="Default select example">
     <?php
-      foreach ($teams as $team) {
-      ?>
-      <option value=<?php echo $team->id; ?>><?php echo $team->name; ?></option>
-    <?php
-      }
+    foreach ($teams as $team) {
     ?>
-    </select>
-    <button type="submit" class="btn btn-primary">Inserir</button>
-  </form>
+      <option value=<?php echo $team->getId(); ?>><?php echo $team->getName(); ?></option>
+    <?php
+    }
+    ?>
+  </select>
+  <button type="submit" class="btn btn-primary">Inserir</button>
+</form>
 
 
-<?php require ('partials/footer.php'); ?>
+<?php require('partials/footer.php'); ?>

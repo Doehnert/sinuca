@@ -2,23 +2,23 @@
 
 namespace App\Core\Database;
 
-class Config {
-   /**
-    * path to the sqlite file
-    */
+class Config
+{
+  /**
+   * path to the sqlite file
+   */
 
-    function __construct(){
-    }
+  function __construct()
+  {
+  }
 
-    public static function getConf()
-    {
-        return [
-            'database' => [
-              'connection' => 'sqlite:'.$_SERVER['DOCUMENT_ROOT'].'/app/core/database/sinuca.db'
-            ]
-          ];
-    }
-
-    // const PATH_TO_SQL = $this->baseDir.'app/core/database/sinuca.db';
-
+  public static function getConf()
+  {
+    var_dump(__DIR__ . '/sinuca.db');
+    return [
+      'database' => [
+        'connection' => 'sqlite:' . __DIR__ . '/sinuca.db'
+      ]
+    ];
+  }
 }
